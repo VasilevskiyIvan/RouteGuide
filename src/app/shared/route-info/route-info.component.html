@@ -1,0 +1,23 @@
+<form class="route-form">
+    <h1 class="route-form__title">Информация о маршруте</h1>
+    <label class="route-form__label">Место отправления</label>
+    <input class="route-form__input" [ngModel]="startAddress" (ngModelChange)="onStartAddressChange($event)"
+        placeholder="Откуда" name="startAddress" />
+    <label class="route-form__label">Место прибытия</label>
+    <input class="route-form__input" [ngModel]="endAddress" (ngModelChange)="onEndAddressChange($event)"
+        placeholder="Куда" name="endAddress" />
+    <select class="route-form__select" [ngModel]="mode" (ngModelChange)="onModeChange($event)" name="mode">
+        <option value="foot">Пешком</option>
+        <option value="bike">Велосипед</option>
+        <option value="car">Авто</option>
+    </select>
+
+    @if (routeData) {
+    <div class="route-form__time-info">
+        <div class="route-form__time-item">
+            <label class="route-form__time-label">Расчётное время в пути</label>
+            <p class="route-form__time-value">{{ routeData.time }}</p>
+        </div>
+    </div>
+    }
+</form>

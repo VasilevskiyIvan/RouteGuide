@@ -1,0 +1,23 @@
+@use './var.scss' as var;
+@import 'leaflet/dist/leaflet.css';
+
+body {
+    margin: 0;
+    background: url("https://avatars.dzeninfra.ru/get-zen_doc/4481244/pub_62d687e34c512e7139f4b14d_62d687f90d702c2dd86ca56b/scale_1200");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var.$color-white-transparent-25;
+    z-index: -1;
+}

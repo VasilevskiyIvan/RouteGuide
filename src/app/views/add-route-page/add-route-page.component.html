@@ -1,0 +1,15 @@
+<main class="main-page">
+    <section class="main-page__text-box">
+        <app-route-info [routeData]="routeInfo" (startAddressChange)="onStartAddressChange($event)"
+            (endAddressChange)="onEndAddressChange($event)" (modeChange)="onModeChange($event)">
+        </app-route-info>
+        <button (click)="calculateRoute()" class="main-page__add-route-btn">Построить маршрут</button>
+        <button (click)="saveRoute()" class="main-page__add-route-btn">Сохранить маршрут</button>
+    </section>
+
+    <section class="main-page__map-box">
+        <app-map></app-map>
+    </section>
+</main>
+
+<button (click)="position()"></button>

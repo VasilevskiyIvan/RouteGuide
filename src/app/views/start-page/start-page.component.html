@@ -1,0 +1,73 @@
+<main class="main">
+    <section class="text-content">
+        <div class="text-content__top">
+            <h1 class="text-content__title">Каждый маршрут — это маленькое путешествие</h1>
+        </div>
+
+        <div class="text-content__body">
+            <h2 class="text-content__subtitle">Наши преимущества</h2>
+
+            <div class="advantages">
+                @for (advantage of advantages; track advantage; let i = $index) {
+                <div class="advantages__item">
+                    <strong>{{advantage.title}}</strong>
+                    <p class="advantages__text">{{advantage.description}}</p>
+                    <button class="advantages__button" (click)="scroll(i)">
+                        <img src="arrow-down.svg" alt="Перейти к подробностям" />
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <img src="Снимок экрана 2025-04-28 143604.jpg" alt="Карта маршрута" class="gallery__main-image">
+
+        <div class="gallery__thumbnails">
+            <img src="image 4.jpg" alt="Пример маршрута 1" class="gallery__thumbnail">
+            <img src="image 5.jpg" alt="Пример маршрута 2" class="gallery__thumbnail">
+        </div>
+    </section>
+</main>
+
+<section class="site-info">
+    <div class="site-info__container">
+        <h2 class="site-info__title">О сайте и как им пользоваться</h2>
+
+        <p class="site-info__intro">
+            Добро пожаловать на <strong>Route Guide</strong>! Этот сайт создан, чтобы сделать планирование маршрутов
+            простым, удобным и увлекательным. Здесь вы сможете быстро находить лучшие пути для прогулок, поездок на
+            велосипеде, автомобиле и не только. Мы подготовили для вас короткие видео-инструкции к каждому разделу,
+            чтобы знакомство с функционалом прошло легко!
+        </p>
+
+        @for (block of siteInfoBlocks; track block; let i = $index) {
+        <div id="advantage-{{i}}" class="site-info__block">
+            <div class="site-info__content" [class.site-info__content--right]="i % 2 !== 0">
+                <h3 class="site-info__subtitle">{{block.title}}</h3>
+                <p class="site-info__text">{{block.description}}</p>
+            </div>
+            <div class="site-info__video" [class.site-info__video--left]="i % 2 !== 0">
+                <video src="RouteGuide — Яндекс Браузер 2025-04-29 01-02-50.mp4" controls></video>
+            </div>
+            <div class="site-info__clearfix"></div>
+        </div>
+        }
+
+        <h2 class="site-info__title">Основные возможности</h2>
+
+        @for (feature of features; track feature; let i = $index) {
+        <div class="site-info__block">
+            <div class="site-info__content" [class.site-info__content--right]="i % 2 !== 0">
+                <h3 class="site-info__subtitle">{{feature.title}}</h3>
+                <p class="site-info__text">{{feature.description}}</p>
+            </div>
+            <div class="site-info__video" [class.site-info__video--left]="i % 2 !== 0">
+                <video src="RouteGuide — Яндекс Браузер 2025-04-29 01-02-50.mp4" controls></video>
+            </div>
+            <div class="site-info__clearfix"></div>
+        </div>
+        }
+    </div>
+</section>

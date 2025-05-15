@@ -1,0 +1,101 @@
+@use '../../var.scss' as var;
+
+:host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+}
+
+.menu {
+    height: 100%;
+    width: max-content;
+    background-color: var.$color-black-transparent-90;
+    display: flex;
+    justify-content: space-between;
+
+    &__content {
+        padding: 200px 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        button {
+            height: 50px;
+            width: 300px;
+            background-color: transparent;
+            border: 3px var.$color-white solid;
+            border-right: none;
+            border-left: none;
+            color: var.$color-white;
+            font-family: var.$font-family-secondary;
+            font-size: 20px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var.$color-white-transparent-75;
+                color: var.$color-black;
+            }
+        }
+    }
+
+    &__close,
+    &__open {
+        height: 100% !important;
+        width: 50px !important;
+        background-color: transparent;
+        border: 3px var.$color-white solid;
+        border-top: none;
+        border-bottom: none;
+        color: var.$color-white;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var.$color-white-transparent-75;
+            color: var.$color-black;
+        }
+
+        img {
+            filter: invert(1);
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    :host {
+        width: max-content;
+    }
+
+    .menu {
+        height: max-content;
+        min-width: 50px;
+        flex-direction: column;
+
+        &__content {
+            padding: 25px;
+            width: calc(100vw - 50px);
+        }
+
+        &__close,
+        &__open {
+            height: 80px !important;
+            border: 3px var.$color-white solid;
+            border-left: none;
+            border-right: none;
+
+            img {
+                height: 100%;
+            }
+        }
+
+        &__open {
+            height: 50px !important;
+            width: 100% !important;
+        }
+    }
+}

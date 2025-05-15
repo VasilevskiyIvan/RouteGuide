@@ -1,0 +1,68 @@
+<!-- <main>
+  <section class="profile-slidebar">
+    <h1>{{ settings.ru.profile.userInfo.title }}</h1>
+    <img src="Background-image.jpg" />
+    <p>Описание профиля</p>
+    <section></section>
+  </section>
+  <section class="profile-stats">
+    <h1>Статистика</h1>
+    <table class="profile-stats__stats-table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          @for (column of settings.ru.profile.userStats.statsTable.columnTitle; track
+          settings.ru.profile.userStats.statsTable.columnTitle) {
+            <th scope="col">{{ column }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of settings.ru.profile.userStats.statsTable.rowTitle; track
+        settings.ru.profile.userStats.statsTable.rowTitle) {
+        <tr>
+          <th scope="row">{{ row }}</th>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <section></section>
+  </section>
+</main> -->
+<main>
+  <section class="profile-slidebar">
+    <h1>{{ settings?.ru?.profile?.userInfo?.title }}</h1>
+    <img src="Background-image.jpg" alt="Background image" />
+
+    @if (currentUser) {
+    <h2>Привет, {{ currentUser.username }}!</h2>
+    <p>{{ currentUser.description || 'Добавьте описание профиля.' }}</p>
+    } @else {
+    <p>Загрузка данных профиля...</p>
+    }
+
+    <section></section>
+  </section>
+
+  <section class="profile-stats">
+    <h1>Статистика</h1>
+    <table class="profile-stats__stats-table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          @for (column of settings?.ru?.profile?.userStats?.statsTable?.columnTitle; track column) {
+          <th scope="col">{{ column }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of settings?.ru?.profile?.userStats?.statsTable?.rowTitle; track row) {
+        <tr>
+          <th scope="row">{{ row }}</th>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <section></section>
+  </section>
+</main>

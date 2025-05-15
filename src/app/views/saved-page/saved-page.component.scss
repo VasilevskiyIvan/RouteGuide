@@ -1,0 +1,206 @@
+@use '../../../var.scss' as var;
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var.$font-family-primary;
+    color: var.$color-white;
+    gap: 50px;
+    padding: 25px;
+    width: calc(100vw - 150px);
+
+    h1 {
+        font-family: var.$font-family-secondary;
+        font-size: 36px;
+        color: var.$color-black;
+        margin: 0;
+    }
+
+    .search {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: var.$color-black-transparent-75;
+        border-radius: var.$border-radius;
+        padding: 10px;
+        gap: 25px;
+
+        &__button {
+            height: 30px;
+            width: 200px;
+            background-color: var.$color-green;
+            border-radius: var.$border-radius;
+            border: 2px solid var.$color-white;
+            font-family: var.$font-family-secondary;
+            font-size: 14px;
+            color: var.$color-white;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var.$color-light-green;
+                border: 2px solid var.$color-black;
+                color: var.$color-black;
+            }
+        }
+
+        &__title {
+            margin: 0;
+        }
+
+        &__filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        &__filter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        &__filter-label {
+            font-size: 14px;
+        }
+
+        &__filter-input, &__filter-select {
+            font-size: 14px;
+            height: 20px;
+            width: 150px;
+            border-radius: var.$border-radius;
+            border: none;
+            padding: 5px;
+        }
+
+        &__filter-select {
+            height: 30px;
+            width: 160px;
+        }
+    }
+
+
+    .routes {
+        width: calc(100% - 50px);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(275px, 500px));
+        justify-content: center;
+        background-color: var.$color-black-transparent-75;
+        border-radius: var.$border-radius;
+        padding: 25px;
+        gap: 25px;
+
+        &__items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var.$color-white;
+            font-size: 16px;
+            color: var.$color-black;
+            padding: 10px;
+            border-radius: var.$border-radius;
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        &__delete-button {
+            margin-top: 20px;
+            width: 100px;
+            height: 30px;
+            background-color: var.$color-delete-btn;
+            border-radius: var.$border-radius;
+            font-family: var.$font-family-secondary;
+            font-size: 14px;
+            color: var.$color-white;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var.$color-delete-btn-hover;
+            }
+        }
+    }
+
+    .map {
+        width: 100%;
+        max-width: 1000px;
+        height: 500px;
+        margin-left: -10px;
+    }
+}
+
+@media (max-width: 1200px) {
+    main {    
+        .routes {
+            grid-template-columns: repeat(auto-fit, minmax(225px, 275px));
+            gap: 15px;
+    
+            &__items {
+                font-size: 12px;
+            }
+        }
+    }   
+}
+
+@media (max-width: 768px) {
+    main {
+        gap: 25px;
+        width: calc(100vw - 65px);
+
+        h1 {
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .search {
+            width: calc(100% - 50px);
+
+            &__filters {
+                flex-direction: column;
+            }
+
+            &__filter-label {
+                font-size: 12px;
+            }
+
+            &__filter-input, &__filter-select {
+                font-size: 12px;
+                height: 15px;
+                width: 100%;
+                padding: 5px;
+            }
+
+            &__filter-select {
+                height: 25px;
+                width: calc(100% + 40px);
+            }
+        }
+
+
+        .routes {
+            width: calc(100% - 50px);
+            grid-template-columns: repeat(auto-fit, minmax(225px, 500px));
+            padding: 10px;
+
+            &__items {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+
+        .map {
+            width: calc(100% - 40px);
+            max-width: 1000px;
+            height: 300px;
+        }
+    }
+}

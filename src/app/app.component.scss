@@ -1,0 +1,51 @@
+@use '../var.scss' as var;
+
+header {
+    padding: 10px 25px;
+    padding-left: 75px;
+    width: calc(100% - 100px);
+    height: 80px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background: linear-gradient(90deg, var.$color-black-transparent-90, transparent);
+
+    .site-title {
+        font-family: var.$font-family-tertiary;
+        font-size: 58px;
+        color: var.$color-white;
+        margin: 0;
+    }
+}
+
+.page {
+    position: relative;
+}
+
+.content {
+    margin: 0 auto;
+    margin-left: 50px;
+    width: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    header {
+        background: linear-gradient(var.$color-black, rgba(0, 0, 0, 0.25));
+        height: 60px;
+        padding: 10px;
+        padding-left: 55px;
+        width: calc(100% - 65px);
+
+        .site-title {
+            font-size: 42px;
+        }
+    }
+
+    .content {
+        margin: 0 auto;
+        width: 100%;
+    }
+}

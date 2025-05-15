@@ -1,0 +1,110 @@
+@use '../../../var.scss' as var;
+
+:host {
+    width: 100%;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 25px;
+    gap: 25px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.profile-slidebar {
+    padding: 20px;
+    background-color: var.$color-black-transparent-75;
+    border-radius: var.$border-radius;
+    color: var.$color-white;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    img {
+        width: 300px;
+        height: auto;
+    }
+}
+
+.profile-stats {
+    padding: 20px;
+    width: 750px;
+    background-color: var.$color-black-transparent-75;
+    border-radius: var.$border-radius;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items:start;
+    gap: 10px;
+
+    &__stats-table {
+        width: 100%;
+
+        td, th {
+            padding: 5px 25px;
+            height: 25px;
+            background-color: var.$color-white-transparent-25;
+            font-size: 20px;
+        }
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    img {
+        width: 300px;
+        height: auto;
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .profile-stats {
+        &__stats-table {
+            td, th {
+                padding: 5px 10px;
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    main {
+        flex-direction: column;
+    }
+
+    .profile-slidebar {
+        padding: 10px;
+        width: auto;
+        h1 {
+            font-size: 18px;
+        }
+        img {
+            width: 250px;
+        }
+    }
+
+    .profile-stats {
+        width: auto;
+    }
+}
+
+@media (max-width: 567px) {
+    .profile-stats {
+        &__stats-table {
+            td, th {
+                padding: 5px;
+                font-size: 14px;
+            }
+        }
+    }
+}

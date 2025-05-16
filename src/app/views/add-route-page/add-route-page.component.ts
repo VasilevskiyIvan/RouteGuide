@@ -9,7 +9,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { User } from '../../shared/interfaces/user';
+import { User } from '../../shared/interfaces/user-interface';
 
 @Component({
   selector: 'app-add-route-page',

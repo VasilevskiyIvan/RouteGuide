@@ -11,18 +11,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private map: L.Map | null = null;
   private routeLayer?: L.GeoJSON;
   private markers: L.Marker[] = [];
-  private defaultIcon = L.icon({
-    iconUrl: 'assets/marker-icon.png',
-    shadowUrl: 'assets/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41]
+  private mapIcon = L.icon({
+    iconUrl: 'map-marker.svg',
+    iconSize: [24, 45],
+    iconAnchor: [12, 35],
   });
 
   constructor() {
-    (L.Marker.prototype as any).options.icon = this.defaultIcon;
+    (L.Marker.prototype as any).options.icon = this.mapIcon;
   }
 
   ngAfterViewInit(): void {

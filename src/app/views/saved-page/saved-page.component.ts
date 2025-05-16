@@ -7,7 +7,8 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { User, LoadedRoute } from '../../shared/interfaces/user';
+import { User} from '../../shared/interfaces/user-interface';
+import { LoadRoute } from '../../shared/interfaces/route-server-interface'; 
 
 @Component({
   selector: 'app-saved-page',
@@ -18,8 +19,8 @@ import { User, LoadedRoute } from '../../shared/interfaces/user';
 })
 export class SavedPageComponent implements OnInit, OnDestroy {
   @ViewChild(MapComponent) mapComponent!: MapComponent;
-  public routes: LoadedRoute[] | null = null;
-  private allUserRoutes: LoadedRoute[] = [];
+  public routes: LoadRoute[] | null = null;
+  private allUserRoutes: LoadRoute[] = [];
   public filterFrom: string = "";
   public filterTo: string = "";
   public filterTime: string = "";
@@ -43,6 +44,13 @@ export class SavedPageComponent implements OnInit, OnDestroy {
         this.allUserRoutes = [];
       }
     });
+
+    this.authService.currentUser.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      this.currentUser = user;
+      if (!user) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,7 +61,21 @@ export class SavedPageComponent implements OnInit, OnDestroy {
   private loadRoutes(userId: string) {
     this.routeService.loadRoutes(userId).pipe(takeUntil(this.destroy$)).subscribe({
       next: (routes) => {
-        this.allUserRoutes = routes || [];
+        console.log(routes);
+        this.allUserRoutes = (routes || []).map(route => {
+          let createdAtDate: Date;
+          if (route.createdAt && typeof route.createdAt === 'object' && typeof (route.createdAt as any).toDate === 'function') {
+            createdAtDate = (route.createdAt as any).toDate();
+          } else {
+            console.error('Ошибка в преобразовании типа "Дата создания":', route.createdAt);
+            createdAtDate = route.createdAt as any;
+          }
+
+          return {
+            ...route,
+            createdAt: createdAtDate
+          };
+        }) as LoadRoute[];
         this.applyFilters();
       },
       error: (err) => {
@@ -135,7 +157,7 @@ export class SavedPageComponent implements OnInit, OnDestroy {
     this.routes = this.allUserRoutes;
   }
 
-  public drawRoute(route: LoadedRoute) {
+  public drawRoute(route: LoadRoute) {
     if (!this.mapComponent) {
       console.error('Компонент карты недоступен.');
       return;
@@ -152,7 +174,7 @@ export class SavedPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  public deleteRoute(event: Event, route: LoadedRoute) {
+  public deleteRoute(event: Event, route: LoadRoute) {
     event.stopPropagation();
 
     if (!this.currentUser || !this.currentUser.id) {

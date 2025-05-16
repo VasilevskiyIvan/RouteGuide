@@ -1,12 +1,4 @@
-export interface User {
-    id: string;
-    username: string;
-    description?: string;
-    avatarUrl?: string;
-}
-
-
-export interface SavedRouteInDb {
+export interface SaveRoute {
     id?: string;
     userId: string;
     createdAt: Date;
@@ -22,7 +14,7 @@ export interface SavedRouteInDb {
     distance?: number;
 }
 
-export interface LoadedRoute {
+export interface LoadRoute {
     id?: string;
     userId: string;
     createdAt: Date;

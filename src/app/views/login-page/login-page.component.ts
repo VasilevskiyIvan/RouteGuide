@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../shared/interfaces/user';
+import { User } from '../../shared/interfaces/user-interface';
 
 @Component({
   selector: 'login-page',
@@ -27,7 +27,7 @@ export class LoginPageComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (user: User | null) => {
         if (user) {
-          this.router.navigate(['/profile']);
+          this.router.navigate(['/saved']);
         } else {
           alert('Неверный email или пароль.');
         }
@@ -37,5 +37,9 @@ export class LoginPageComponent {
         alert('Ошибка при входе.');
       }
     });
+  }
+
+  register(): void {
+    this.router.navigate(['/register']);
   }
 }

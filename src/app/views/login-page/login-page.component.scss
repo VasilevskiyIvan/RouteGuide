@@ -1,0 +1,82 @@
+@use '../../../var.scss' as var;
+
+:host {
+    padding: 50px;
+}
+
+.login-page {
+    background-color: var.$color-black-transparent-75;
+    padding: 25px;
+    color: var.$color-white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: var.$font-family-primary;
+    border-radius: var.$border-radius;
+
+    h1 {
+        margin: 0;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__label {
+        margin-bottom: 5px;
+    }
+
+    &__input {
+        height: 20px;
+        width: 240px;
+        padding: 5px;
+        border-radius: var.$border-radius;
+    }
+
+    &__submit-btn {
+        background-color: var.$color-green;
+        border-radius: var.$border-radius;
+        width: 200px;
+        height: 30px;
+        font-family: var.$font-family-secondary;
+        color: var.$color-white;
+        box-shadow: 0 0 5px var.$color-white;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var.$color-light-green;
+            color: var.$color-black;
+        }
+    }
+
+    &__answer-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__register-btn {
+        border: none;
+        background-color: transparent;
+        font-family: var.$font-family-primary;
+        font-size: 16px;
+        color: var.$color-light-green;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 576px) {
+    :host {
+        padding: 50px 0;
+    }
+}

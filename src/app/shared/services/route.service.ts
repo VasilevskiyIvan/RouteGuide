@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Observable, from, of, firstValueFrom } from 'rxjs';
 import { Firestore, collection, addDoc, query, where, getDocs, deleteDoc, doc, orderBy } from '@angular/fire/firestore';
-import { SavedRouteInDb, LoadedRoute } from '../interfaces/user';
+import { SaveRoute, LoadRoute } from '../interfaces/route-server-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +67,7 @@ export class RouteService {
       return of(null);
     }
 
-    const routeToSave: Omit<SavedRouteInDb, 'id'> = {
+    const routeToSave: Omit<SaveRoute, 'id'> = {
       userId: userId,
       createdAt: new Date(),
       startAddress: route.startAddress,
@@ -89,7 +89,7 @@ export class RouteService {
     );
   }
 
-  public loadRoutes(userId: string): Observable<LoadedRoute[]> {
+  public loadRoutes(userId: string): Observable<LoadRoute[]> {
     if (!userId) {
       console.warn('Отсутствует userId для загрузки маршрутов.');
       return of([]);
@@ -100,9 +100,9 @@ export class RouteService {
 
     return from(getDocs(q)).pipe(
       map(querySnapshot => {
-        const loadedRoutes: LoadedRoute[] = [];
+        const loadedRoutes: LoadRoute[] = [];
         querySnapshot.forEach((doc) => {
-          const data = doc.data() as Omit<SavedRouteInDb, 'id'>;
+          const data = doc.data() as Omit<SaveRoute, 'id'>;
           let parsedRoutes = null;
           let parsedWaypoints = null;
 
@@ -118,7 +118,7 @@ export class RouteService {
             return;
           }
 
-          const loadedRoute: LoadedRoute = {
+          const loadedRoute: LoadRoute = {
             id: doc.id,
             userId: data.userId,
             createdAt: data.createdAt,

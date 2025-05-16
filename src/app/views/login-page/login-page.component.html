@@ -1,15 +1,17 @@
-<div class="auth-container">
-    <h1>Вход</h1>
-    <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input id="email" type="email" [(ngModel)]="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" [(ngModel)]="password" name="password" required>
-        </div>
-        <button type="submit">Войти</button>
-    </form>
-    <p>Еще нет аккаунта? <a routerLink="/register">Зарегистрироваться</a></p>
-</div>
+<main class="login-page">
+    <h1>Вход</h1>
+    <form (ngSubmit)="onSubmit()" class="login-page__form">
+        <div class="form-group" class="login-page__form-group">
+            <label for="email" class="login-page__label">Email:</label>
+            <input id="email" class="login-page__input" type="email" [(ngModel)]="email" name="email"
+                required>
+            </div>
+        <div class="form-group" class="login-page__form-group">
+            <label for="password" class="login-page__label">Пароль:</label>
+            <input type="password" class="login-page__input" id="password" [(ngModel)]="password"
+                name="password" required>
+            </div>
+        <button type="submit" class="login-page__submit-btn">Войти</button>
+        </form>
+    <p>Нет аккаунта?<button (click)="register()" class="login-page__register-btn">Зарегистрироваться</button></p>
+</main>

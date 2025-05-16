@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../shared/interfaces/user';
+import { User } from '../../shared/interfaces/user-interface';
 
 @Component({
   selector: 'app-register',
@@ -43,5 +43,9 @@ export class RegisterPageComponent {
         alert('Ошибка при регистрации.');
       }
     });
+  }
+
+  login(): void {
+    this.router.navigate(['/login']);
   }
 }

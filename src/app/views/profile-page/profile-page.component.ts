@@ -5,7 +5,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { User } from '../../shared/interfaces/user';
+import { User } from '../../shared/interfaces/user-interface';
 import { Router } from '@angular/router';
 
 @Component({

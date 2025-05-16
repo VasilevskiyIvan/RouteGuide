@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, User as FirebaseAuthUser } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
 import { Observable, from, of, BehaviorSubject, switchMap, map, catchError, tap } from 'rxjs';
-import { User } from '../interfaces/user';
+import { User } from '../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class AuthService {
   constructor(private auth: Auth, private firestore: Firestore) {
     user(this.auth).pipe(
       switchMap(firebaseUser => {
+        console.log('!!! FBUser: ', firebaseUser);
         if (firebaseUser) {
           return from(this.getUserProfileFromFirestore(firebaseUser.uid)).pipe(
             catchError(err => {

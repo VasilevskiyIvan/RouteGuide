@@ -1,15 +1,13 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { RouteService } from '../../shared/services/route.service'; // Проверь путь
-import { MapComponent } from '../../shared/map/map.component'; // Проверь путь
+import { RouteService } from '../../shared/services/route.service';
+import { MapComponent } from '../../shared/map/map.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../shared/services/auth.service'; // Проверь путь
+import { AuthService } from '../../shared/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-// *** ИСПРАВЛЕНИЕ: Импортируем User и LoadedRoute ***
 import { User, LoadedRoute } from '../../shared/interfaces/user';
-
 
 @Component({
   selector: 'app-saved-page',
@@ -20,78 +18,60 @@ import { User, LoadedRoute } from '../../shared/interfaces/user';
 })
 export class SavedPageComponent implements OnInit, OnDestroy {
   @ViewChild(MapComponent) mapComponent!: MapComponent;
+  public routes: LoadedRoute[] | null = null;
+  private allUserRoutes: LoadedRoute[] = [];
+  public filterFrom: string = "";
+  public filterTo: string = "";
+  public filterTime: string = "";
+  public filterMode: string = "";
+  public currentUser: User | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private routeService: RouteService,
     private authService: AuthService,
     private router: Router
-  ) {
-    console.log('SavedPageComponent создан');
-  }
-
-  // *** ИСПРАВЛЕНИЕ: Изменяем тип на LoadedRoute[] ***
-  public routes: LoadedRoute[] | null = null;
-  private allUserRoutes: LoadedRoute[] = [];
-
-  // Поля фильтрации - остаются без изменений
-  public filterFrom: string = "";
-  public filterTo: string = "";
-  public filterTime: string = ""; // Для фильтрации по дате
-  public filterMode: string = "";
-
-  public currentUser: User | null = null;
-
-  private destroy$ = new Subject<void>();
+  ) { }
 
   ngOnInit(): void {
-    console.log('SavedPageComponent OnInit');
     this.authService.currentUser.pipe(takeUntil(this.destroy$)).subscribe(user => {
       this.currentUser = user;
-      console.log('Текущий пользователь на странице Saved:', this.currentUser?.username, 'UID:', this.currentUser?.id);
       if (user && user.id) {
         this.loadRoutes(user.id);
       } else {
         this.routes = [];
         this.allUserRoutes = [];
-        console.log('Пользователь не залогинен, маршруты не загружены.');
       }
     });
   }
 
   ngOnDestroy(): void {
-    console.log('SavedPageComponent OnDestroy');
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   private loadRoutes(userId: string) {
-    console.log('Загрузка маршрутов для пользователя:', userId);
-    // RouteService.loadRoutes теперь возвращает Observable<LoadedRoute[]>
     this.routeService.loadRoutes(userId).pipe(takeUntil(this.destroy$)).subscribe({
       next: (routes) => {
         this.allUserRoutes = routes || [];
-        console.log('Маршруты успешно загружены:', this.allUserRoutes.length);
         this.applyFilters();
       },
       error: (err) => {
-        console.error('Ошибка при загрузке маршрутов пользователя:', userId, err);
+        console.error('Ошибка загрузки маршрутов:', err);
         this.allUserRoutes = [];
         this.routes = [];
-        alert('Ошибка при загрузке маршрутов.');
+        alert('Ошибка загрузки маршрутов.');
       }
     });
   }
 
   public applyFilters() {
-    console.log('Применение фильтров.');
     if (!this.allUserRoutes) {
       this.routes = [];
       return;
     }
 
     this.routes = this.allUserRoutes.filter(route => {
-      // Логика фильтрации остается прежней, т.к. используемые поля (startAddress, mode, createdAt, duration, distance)
-      // присутствуют в интерфейсе LoadedRoute
       if (this.filterFrom &&
         !route.startAddress.toLowerCase().includes(this.filterFrom.toLowerCase())) {
         return false;
@@ -108,8 +88,6 @@ export class SavedPageComponent implements OnInit, OnDestroy {
 
       if (this.filterTime) {
         try {
-          // Логика работы с датой из предыдущего исправления
-          // Убедись, что route.createdAt - это объект Date после загрузки
           let dateToCompare: Date | null = null;
 
           if (route.createdAt instanceof Date) {
@@ -129,9 +107,8 @@ export class SavedPageComponent implements OnInit, OnDestroy {
             }
           }
 
-
           if (!dateToCompare) {
-            console.error('Не удалось получить корректный Date объект из:', route.createdAt);
+            console.error('Ошибка получения даты:', route.createdAt);
             return false;
           }
 
@@ -141,18 +118,16 @@ export class SavedPageComponent implements OnInit, OnDestroy {
           }
 
         } catch (e) {
-          console.error('Непредвиденная ошибка при форматировании или фильтрации даты:', route.createdAt, e);
+          console.error('Ошибка фильтрации по дате:', e);
           return false;
         }
       }
 
       return true;
     });
-    console.log('Отфильтровано маршрутов:', this.routes.length);
   }
 
   public resetFilters() {
-    console.log('Сброс фильтров.');
     this.filterFrom = "";
     this.filterTo = "";
     this.filterTime = "";
@@ -160,54 +135,46 @@ export class SavedPageComponent implements OnInit, OnDestroy {
     this.routes = this.allUserRoutes;
   }
 
-  // drawRoute принимает LoadedRoute
   public drawRoute(route: LoadedRoute) {
     if (!this.mapComponent) {
-      console.error('Компонент карты не доступен!');
+      console.error('Компонент карты недоступен.');
       return;
     }
-    console.log('Выбран для отрисовки: ', route);
-    // Теперь route.routes и route.waypoints - это уже распарсенные объекты/массивы
+
     if (route && route.waypoints && route.waypoints.length >= 2 && route.waypoints[0].location && route.waypoints[1].location) {
       let start = route.waypoints[0].location.reverse();
       let end = route.waypoints[1].location.reverse();
-      console.log('Start: ', start);
-      console.log('End: ', end);
       this.mapComponent.addMarkers(start as [number, number], end as [number, number]);
-      this.mapComponent.drawRoute(route); // Передаем LoadedRoute
+      this.mapComponent.drawRoute(route);
     } else {
-      console.error('Не удалось отрисовать маршрут: отсутствуют данные waypoints или location в сохраненном маршруте.');
-      alert('Не удалось отрисовать маршрут. Неполные данные.');
+      console.error('Недостаточно данных для отрисовки маршрута.');
+      alert('Ошибка отрисовки маршрута.');
     }
   }
 
-  // deleteRoute принимает LoadedRoute, но использует только route.id (строковый ID из базы)
   public deleteRoute(event: Event, route: LoadedRoute) {
     event.stopPropagation();
 
-    console.log('Попытка удаления маршрута:', route.id, 'пользователем:', this.currentUser?.id);
-
     if (!this.currentUser || !this.currentUser.id) {
-      alert('Вы не авторизованы для удаления маршрутов.');
+      alert('Авторизуйтесь для удаления маршрутов.');
       return;
     }
 
     if (route.userId !== this.currentUser.id) {
-      console.warn('Пользователь пытается удалить чужой маршрут! UID:', this.currentUser.id, 'Владелец маршрута:', route.userId);
+      console.warn('Попытка удалить чужой маршрут:', this.currentUser.id, route.userId);
       alert('Вы не можете удалить этот маршрут.');
       return;
     }
 
     this.routeService.deleteRoute(route.id!).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        console.log('Маршрут успешно удален из Firestore:', route.id);
         this.allUserRoutes = this.allUserRoutes.filter(r => r.id !== route.id);
         this.applyFilters();
         alert('Маршрут удален.');
       },
       error: (err) => {
-        console.error('Ошибка удаления маршрута из Firestore:', route.id, err);
-        alert('Ошибка при удалении маршрута.');
+        console.error('Ошибка удаления маршрута:', err);
+        alert('Ошибка удаления маршрута.');
       }
     });
   }

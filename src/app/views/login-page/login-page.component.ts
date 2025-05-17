@@ -16,7 +16,10 @@ export class LoginPageComponent {
   email = '';
   password = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   onSubmit(): void {
     if (!this.email || !this.password) {
@@ -27,14 +30,16 @@ export class LoginPageComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (user: User | null) => {
         if (user) {
-          this.router.navigate(['/saved']);
+          setTimeout(() => {
+            this.router.navigate(['/saved']);
+          }, 0);
         } else {
           alert('Неверный email или пароль.');
         }
       },
       error: (err) => {
         console.error('Ошибка входа:', err);
-        alert('Ошибка при входе.');
+        alert('Произошла ошибка при входе.');
       }
     });
   }

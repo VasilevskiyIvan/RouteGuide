@@ -2,11 +2,14 @@
     @if(t) {
         <div class="menu__content">
             @if (isLoggedIn$ | async) {
-                 <button (click)="logout()">Выйти</button>
-            }
-
-            @for (buttonContent of buttonsContent; track buttonContent) {
-                 <button [routerLink]="[buttonContent.path]" (click)="t = false">{{ buttonContent.text }}</button>
+                <button (click)="logout()">Выйти</button>
+                @for (buttonContent of buttonsContentWithAuth; track buttonContent) {
+                    <button [routerLink]="[buttonContent.path]" (click)="t = false">{{ buttonContent.text }}</button>
+                }
+            } @else {
+                @for (buttonContent of buttonsContentWithoutAuth; track buttonContent) {
+                    <button [routerLink]="[buttonContent.path]" (click)="t = false">{{ buttonContent.text }}</button>
+                }
             }
         </div>
         <button class="menu__open" (click)="t=!t"><img src="left-arrow.svg" alt="Open Menu"></button>

@@ -6,9 +6,8 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../shared/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { User} from '../../shared/interfaces/user-interface';
-import { LoadRoute } from '../../shared/interfaces/route-server-interface'; 
+import { User } from '../../shared/interfaces/user-interface';
+import { LoadRoute } from '../../shared/interfaces/route-server-interface';
 
 @Component({
   selector: 'app-saved-page',
@@ -31,7 +30,6 @@ export class SavedPageComponent implements OnInit, OnDestroy {
   constructor(
     private routeService: RouteService,
     private authService: AuthService,
-    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -47,9 +45,6 @@ export class SavedPageComponent implements OnInit, OnDestroy {
 
     this.authService.currentUser.pipe(takeUntil(this.destroy$)).subscribe(user => {
       this.currentUser = user;
-      if (!user) {
-        this.router.navigate(['/login']);
-      }
     });
   }
 
@@ -111,36 +106,14 @@ export class SavedPageComponent implements OnInit, OnDestroy {
       if (this.filterTime) {
         try {
           let dateToCompare: Date | null = null;
-
-          if (route.createdAt instanceof Date) {
-            dateToCompare = route.createdAt;
-          }
-          else if (route.createdAt && typeof route.createdAt === 'object' && typeof (route.createdAt as any).toDate === 'function') {
-            dateToCompare = (route.createdAt as any).toDate();
-          }
-          else if (typeof route.createdAt === 'string') {
-            try {
-              dateToCompare = new Date(route.createdAt);
-              if (isNaN(dateToCompare.getTime())) {
-                dateToCompare = null;
-              }
-            } catch (e) {
-              dateToCompare = null;
-            }
-          }
-
-          if (!dateToCompare) {
-            console.error('Ошибка получения даты:', route.createdAt);
-            return false;
-          }
-
+          dateToCompare = route.createdAt;
           const routeDateString = dateToCompare.toISOString().split('T')[0];
           if (routeDateString !== this.filterTime) {
             return false;
           }
 
-        } catch (e) {
-          console.error('Ошибка фильтрации по дате:', e);
+        } catch (err) {
+          console.error('Ошибка фильтрации по дате:', err);
           return false;
         }
       }
@@ -158,36 +131,18 @@ export class SavedPageComponent implements OnInit, OnDestroy {
   }
 
   public drawRoute(route: LoadRoute) {
-    if (!this.mapComponent) {
-      console.error('Компонент карты недоступен.');
-      return;
-    }
-
     if (route && route.waypoints && route.waypoints.length >= 2 && route.waypoints[0].location && route.waypoints[1].location) {
       let start = route.waypoints[0].location.reverse();
       let end = route.waypoints[1].location.reverse();
       this.mapComponent.addMarkers(start as [number, number], end as [number, number]);
       this.mapComponent.drawRoute(route);
     } else {
-      console.error('Недостаточно данных для отрисовки маршрута.');
       alert('Ошибка отрисовки маршрута.');
     }
   }
 
   public deleteRoute(event: Event, route: LoadRoute) {
     event.stopPropagation();
-
-    if (!this.currentUser || !this.currentUser.id) {
-      alert('Авторизуйтесь для удаления маршрутов.');
-      return;
-    }
-
-    if (route.userId !== this.currentUser.id) {
-      console.warn('Попытка удалить чужой маршрут:', this.currentUser.id, route.userId);
-      alert('Вы не можете удалить этот маршрут.');
-      return;
-    }
-
     this.routeService.deleteRoute(route.id!).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.allUserRoutes = this.allUserRoutes.filter(r => r.id !== route.id);

@@ -21,7 +21,6 @@ export class RouteService {
       if (response && response.length > 0) {
         return [parseFloat(response[0].lat), parseFloat(response[0].lon)];
       } else {
-        console.warn('Адрес не найден:', address);
         throw new Error('Адрес не найден');
       }
     } catch (error) {
@@ -45,7 +44,6 @@ export class RouteService {
 
   public saveRoute(route: any, userId: string): Observable<any> {
     if (!userId) {
-      console.error('Отсутствует userId для сохранения маршрута.');
       alert('Ошибка: Не удалось определить пользователя.');
       return of(null);
     }
@@ -91,7 +89,6 @@ export class RouteService {
 
   public loadRoutes(userId: string): Observable<LoadRoute[]> {
     if (!userId) {
-      console.warn('Отсутствует userId для загрузки маршрутов.');
       return of([]);
     }
 
@@ -144,7 +141,6 @@ export class RouteService {
 
   public deleteRoute(routeId: string): Observable<void> {
     if (!routeId) {
-      console.warn('Отсутствует routeId для удаления маршрута.');
       return of(undefined);
     }
 

@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { RouteService } from '../../shared/services/route.service';
 import { MapComponent } from '../../shared/map/map.component';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouteInfo } from '../../shared/interfaces/route-info-inteface';
 import { RouteInfoComponent } from '../../shared/route-info/route-info.component';
@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from '../../shared/interfaces/user-interface';
+import { timeFormat } from '../../shared/utils/timeFormat';
 
 @Component({
   selector: 'app-add-route-page',
@@ -37,9 +38,6 @@ export class AddRoutePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authService.currentUser.pipe(takeUntil(this.destroy$)).subscribe(user => {
       this.currentUser = user;
-      if (!user) {
-        this.router.navigate(['/login']);
-      }
     });
   }
 
@@ -62,7 +60,7 @@ export class AddRoutePageComponent implements OnInit, OnDestroy {
 
   async calculateRoute(): Promise<void> {
     if (!this.startAddress || !this.endAddress) {
-      alert('Введите адреса');
+      alert('Введите адреса.');
       return;
     }
 
@@ -85,15 +83,14 @@ export class AddRoutePageComponent implements OnInit, OnDestroy {
     this.currentRoute.endAddress = this.endAddress;
     this.currentRoute.mode = this.mode;
 
-    if (route && route.routes && route.routes[0] && route.routes[0].duration !== undefined && route.routes[0].distance !== undefined) {
+    if (route?.routes?.[0]?.duration !== undefined && route?.routes?.[0]?.distance !== undefined) {
       this.routeInfo = {
         from: this.startAddress,
         to: this.endAddress,
-        time: this.timeFormat(route.routes[0].duration),
+        time: timeFormat(route.routes[0].duration),
         distance: `${(route.routes[0].distance / 1000).toFixed(2)} км`
       };
     } else {
-      console.warn('Недостаточно данных о маршруте.');
       this.routeInfo = {
         from: this.startAddress,
         to: this.endAddress,
@@ -116,23 +113,6 @@ export class AddRoutePageComponent implements OnInit, OnDestroy {
     }
 
     this.routeService.saveRoute(this.currentRoute, this.currentUser.id).pipe(takeUntil(this.destroy$)).subscribe();
-  }
-
-  private timeFormat(time: number | undefined | null): string {
-    if (time === undefined || time === null || isNaN(time)) return `Не удается определить время`;
-
-    let days = Math.floor(time / 86400);
-    let hours = Math.floor((time % 86400) / 3600);
-    let mins = Math.floor((time % 3600) / 60);
-    let secs = Math.floor((time % 60) / 1);
-
-    let parts: string[] = [];
-    if (days > 0) parts.push(`${days} д`);
-    if (hours > 0) parts.push(`${hours} ч`);
-    if (mins > 0) parts.push(`${mins} мин`);
-    if (secs > 0 && parts.length === 0) parts.push(`${secs} сек`);
-
-    return parts.length > 0 ? parts.join(' ') : `Менее минуты`;
   }
 
   public position() {

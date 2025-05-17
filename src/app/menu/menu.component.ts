@@ -14,11 +14,16 @@ import { AuthService } from '../shared/services/auth.service';
 export class LeftMenuComponent implements OnInit {
   public t = false;
 
-  public buttonsContent = [
+  public buttonsContentWithAuth = [
     { path: "", text: "Главная" },
     { path: "profile", text: "Профиль" },
     { path: "add-route", text: "Составить маршрут" },
     { path: "saved", text: "Избранные маршруты" },
+  ];
+
+  public buttonsContentWithoutAuth = [
+    { path: "login", text: "Войти"},
+    { path: "", text: "Главная" }
   ];
 
   public isLoggedIn$!: Observable<boolean>;

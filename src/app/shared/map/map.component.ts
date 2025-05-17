@@ -1,12 +1,12 @@
 import * as L from 'leaflet';
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit, OnDestroy {
+export class MapComponent implements AfterViewInit {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   private map: L.Map | null = null;
   private routeLayer?: L.GeoJSON;
@@ -25,23 +25,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.initMap();
   }
 
-  ngOnDestroy(): void {
-    if (this.map) {
-      this.map.remove();
-      this.map = null;
-    }
-    this.markers = [];
-    this.routeLayer = undefined;
-  }
-
   private initMap(): void {
     try {
       if (!this.mapContainer || !this.mapContainer.nativeElement) {
-        console.warn('Контейнер карты недоступен.');
-        return;
-      }
-      if (this.map) {
-        console.warn('Карта уже инициализирована.');
+        console.error('Контейнер карты недоступен.');
         return;
       }
       const mapInstance = L.map(this.mapContainer.nativeElement, {});
@@ -53,8 +40,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
       if (this.mapContainer.nativeElement.offsetWidth > 0 && this.mapContainer.nativeElement.offsetHeight > 0) {
         this.map.setView([55.160077, 61.397225], 10);
-      } else {
-        console.warn('Невозможно установить вид карты: контейнер имеет нулевые размеры.');
       }
     } catch (error) {
       console.error('Ошибка инициализации карты:', error);
@@ -64,21 +49,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public drawRoute(route: any): void {
     this.clearRoute();
     try {
-      if (!this.map) {
-        console.warn('Невозможно отобразить маршрут: карта не инициализирована.');
-        return;
-      }
-      if (route?.routes?.[0]?.geometry) {
-        this.routeLayer = L.geoJSON(route.routes[0].geometry, {
-          style: { color: 'rgb(23, 75, 45)', weight: 5 }
-        }).addTo(this.map);
-        if (this.map && this.routeLayer && this.routeLayer.getBounds().isValid()) {
-          this.map.fitBounds(this.routeLayer.getBounds());
-        } else {
-          console.warn('Невозможно масштабировать маршрут: некорректные границы.');
+      if (this.map) {
+        if (route?.routes?.[0]?.geometry) {
+          this.routeLayer = L.geoJSON(route.routes[0].geometry, {
+            style: { color: 'rgb(23, 75, 45)', weight: 5 }
+          }).addTo(this.map);
+          if (this.map && this.routeLayer && this.routeLayer.getBounds().isValid()) {
+            this.map.fitBounds(this.routeLayer.getBounds());
+          }
         }
-      } else {
-        console.warn('Невозможно отобразить маршрут: отсутствуют данные геометрии.');
       }
     } catch (error) {
       console.error('Ошибка отображения маршрута:', error);
@@ -88,14 +67,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public addMarkers(start: [number, number], end: [number, number]): void {
     this.clearMarkers();
     try {
-      if (!this.map) {
-        console.warn('Невозможно добавить маркеры: карта не инициализирована.');
-        return;
+      if (this.map) {
+        const startMarkerInstance = L.marker(start).addTo(this.map).bindPopup('Начало').openPopup();
+        this.markers.push(startMarkerInstance);
+        const endMarkerInstance = L.marker(end).addTo(this.map).bindPopup('Конец');
+        this.markers.push(endMarkerInstance);
       }
-      const startMarkerInstance = L.marker(start).addTo(this.map).bindPopup('Начало').openPopup();
-      this.markers.push(startMarkerInstance);
-      const endMarkerInstance = L.marker(end).addTo(this.map).bindPopup('Конец');
-      this.markers.push(endMarkerInstance);
     } catch (error) {
       console.error('Ошибка добавления маркеров:', error);
     }
@@ -104,12 +81,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public addMark(point: [number, number]): void {
     this.clearMarkers();
     try {
-      if (!this.map) {
-        console.warn('Невозможно добавить маркер: карта не инициализирована.');
-        return;
+      if (this.map) {
+        const MarkInstance = L.marker(point).addTo(this.map).bindPopup('Я').openPopup();
+        this.markers.push(MarkInstance);
       }
-      const MarkInstance = L.marker(point).addTo(this.map).bindPopup('Я').openPopup();
-      this.markers.push(MarkInstance);
     } catch (error) {
       console.error('Ошибка добавления маркера:', error);
     }
@@ -132,8 +107,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             this.map!.removeLayer(marker);
           }
         });
-      } else {
-        console.warn('Невозможно удалить маркеры: карта не инициализирована.');
       }
       this.markers = [];
     }
@@ -142,8 +115,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   public recenterMap(latlng: [number, number] = [55.160077, 61.397225], zoom: number = 10): void {
     if (this.map) {
       this.map.setView(latlng, zoom);
-    } else {
-      console.warn('Невозможно отцентрировать карту: карта не инициализирована.');
     }
   }
 }

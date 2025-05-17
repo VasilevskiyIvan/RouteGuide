@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, User as FirebaseAuthUser } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
-import { Observable, from, of, BehaviorSubject, switchMap, map, catchError, tap } from 'rxjs';
+import { BehaviorSubject, Observable, from, of, switchMap, map, catchError, tap, shareReplay } from 'rxjs';
 import { User } from '../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  public currentUser: Observable<User | null> = this.currentUserSubject.asObservable();
+  private _currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  public currentUser: Observable<User | null>;
 
   constructor(private auth: Auth, private firestore: Firestore) {
-    user(this.auth).pipe(
+    this.currentUser = user(this.auth).pipe(
       switchMap(firebaseUser => {
-        console.log('!!! FBUser: ', firebaseUser);
         if (firebaseUser) {
           return from(this.getUserProfileFromFirestore(firebaseUser.uid)).pipe(
             catchError(err => {
-              console.error('Ошибка получения профиля из Firestore:', err);
+              console.error('Ошибка профиля из Firestore:', err);
               return of(null);
             })
           );
@@ -27,18 +26,21 @@ export class AuthService {
         }
       }),
       catchError(err => {
-        console.error('Ошибка в потоке авторизации:', err);
-        this.logout();
+        console.error('Ошибка в AuthService:', err);
         return of(null);
-      })
-    ).subscribe(user => {
-      this.currentUserSubject.next(user);
-      if (user) {
-        localStorage.setItem('currentUserId', user.id);
-      } else {
-        localStorage.removeItem('currentUserId');
-      }
-    });
+      }),
+      shareReplay(1),
+      tap(user => {
+           this._currentUserSubject.next(user);
+           if (user) {
+             localStorage.setItem('currentUserId', user.id);
+           } else {
+             localStorage.removeItem('currentUserId');
+           }
+       })
+    );
+
+    this.currentUser.subscribe();
   }
 
   login(email: string, password: string): Observable<User | null> {
@@ -48,11 +50,6 @@ export class AuthService {
           return from(this.getUserProfileFromFirestore(userCredential.user.uid));
         } else {
           return of(null);
-        }
-      }),
-      tap(user => {
-        if (!user) {
-          console.warn('Логин не выполнен или профиль не найден.');
         }
       }),
       catchError(error => {
@@ -83,22 +80,6 @@ export class AuthService {
     );
   }
 
-  private async getUserProfileFromFirestore(uid: string): Promise<User | null> {
-    if (!uid) {
-      console.warn('Запрос профиля без UID.');
-      return null;
-    }
-    const userDocRef = doc(this.firestore, `users/${uid}`);
-    const userSnapshot = await getDoc(userDocRef);
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data() as Omit<User, 'id'>;
-      return { id: userSnapshot.id, ...userData };
-    } else {
-      console.warn('Профиль не найден для UID:', uid);
-      return null;
-    }
-  }
-
   logout(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       catchError(error => {
@@ -113,14 +94,10 @@ export class AuthService {
   }
 
   getCurrentUserId(): string | null {
-    return this.currentUserSubject.value?.id || null;
+    return this._currentUserSubject.value?.id || null;
   }
 
   getUserById(id: string): Observable<User | null> {
-    if (!id) {
-      console.warn('Запрос пользователя без ID.');
-      return of(null);
-    }
     const userDocRef = doc(this.firestore, `users/${id}`);
     return from(getDoc(userDocRef)).pipe(
       map(userSnapshot => {
@@ -137,5 +114,17 @@ export class AuthService {
         return of(null);
       })
     );
+  }
+
+  private async getUserProfileFromFirestore(uid: string): Promise<User | null> {
+    const userDocRef = doc(this.firestore, `users/${uid}`);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data() as Omit<User, 'id'>;
+      return { id: userSnapshot.id, ...userData };
+    } else {
+      console.warn('Профиль не найден для UID:', uid);
+      return null;
+    }
   }
 }

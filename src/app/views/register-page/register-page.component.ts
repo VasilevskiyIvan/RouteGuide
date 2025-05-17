@@ -35,12 +35,12 @@ export class RegisterPageComponent {
         if (user) {
           this.router.navigate(['/profile']);
         } else {
-          alert('Ошибка регистрации. Возможно, email уже используется.');
+          alert('Ошибка регистрации.');
         }
       },
       error: (err) => {
         console.error('Ошибка регистрации:', err);
-        alert('Ошибка при регистрации.');
+        alert('Произошла ошибка при регистрации.');
       }
     });
   }

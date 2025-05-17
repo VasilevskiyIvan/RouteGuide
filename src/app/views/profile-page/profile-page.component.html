@@ -1,37 +1,6 @@
-<!-- <main>
-  <section class="profile-slidebar">
-    <h1>{{ settings.ru.profile.userInfo.title }}</h1>
-    <img src="Background-image.jpg" />
-    <p>Описание профиля</p>
-    <section></section>
-  </section>
-  <section class="profile-stats">
-    <h1>Статистика</h1>
-    <table class="profile-stats__stats-table">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          @for (column of settings.ru.profile.userStats.statsTable.columnTitle; track
-          settings.ru.profile.userStats.statsTable.columnTitle) {
-            <th scope="col">{{ column }}</th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of settings.ru.profile.userStats.statsTable.rowTitle; track
-        settings.ru.profile.userStats.statsTable.rowTitle) {
-        <tr>
-          <th scope="row">{{ row }}</th>
-        </tr>
-        }
-      </tbody>
-    </table>
-    <section></section>
-  </section>
-</main> -->
 <main>
   <section class="profile-slidebar">
-    <h1>{{ settings?.ru?.profile?.userInfo?.title }}</h1>
+    <h1>Профиль</h1>
     <img src="Background-image.jpg" alt="Background image" />
 
     @if (currentUser) {
@@ -50,15 +19,26 @@
       <thead>
         <tr>
           <th scope="col"></th>
-          @for (column of settings?.ru?.profile?.userStats?.statsTable?.columnTitle; track column) {
-          <th scope="col">{{ column }}</th>
-          }
+          <th scope="col">Последний месяц</th>
+          <th scope="col">Всё время</th>
         </tr>
       </thead>
       <tbody>
-        @for (row of settings?.ru?.profile?.userStats?.statsTable?.rowTitle; track row) {
+        @if (isLoadingStats) {
         <tr>
-          <th scope="row">{{ row }}</th>
+          <td>Загрузка статистики...</td>
+        </tr>
+        } @else if (stats.length > 0) {
+        @for (statRow of stats; track statRow.label) {
+        <tr>
+          <th scope="row">{{ statRow.label }}</th>
+          <td>{{ statRow.lastMonth }}</td>
+          <td>{{ statRow.allTime }}</td>
+        </tr>
+        }
+        } @else {
+        <tr>
+          <td>Статистика отсутствует</td>
         </tr>
         }
       </tbody>

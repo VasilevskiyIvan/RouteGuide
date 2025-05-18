@@ -114,8 +114,4 @@ export class AddRoutePageComponent implements OnInit, OnDestroy {
 
     this.routeService.saveRoute(this.currentRoute, this.currentUser.id).pipe(takeUntil(this.destroy$)).subscribe();
   }
-
-  public position() {
-    alert('Функционал определения позиции еще не реализован.');
-  }
 }

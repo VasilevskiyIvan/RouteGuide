@@ -2,6 +2,10 @@
     <section class="text-content">
         <div class="text-content__top">
             <h1 class="text-content__title">Каждый маршрут — это маленькое путешествие</h1>
+            <div class="auth-buttons">
+                <button class="auth-buttons__auth-btn" (click)="register()">Регистрация</button>
+                <button class="auth-buttons__auth-btn" (click)="login()">Войти</button>
+            </div>
         </div>
 
         <div class="text-content__body">
@@ -12,7 +16,7 @@
                 <div class="advantages__item">
                     <strong>{{advantage.title}}</strong>
                     <p class="advantages__text">{{advantage.description}}</p>
-                    <button class="advantages__button" (click)="scroll(i)">
+                    <button class="advantages__button" (click)="scroll(advantage.targetId)">
                         <img src="arrow-down.svg" alt="Перейти к подробностям" />
                     </button>
                 </div>
@@ -43,30 +47,25 @@
         </p>
 
         @for (block of siteInfoBlocks; track block; let i = $index) {
-        <div id="advantage-{{i}}" class="site-info__block">
-            <div class="site-info__content" [class.site-info__content--right]="i % 2 !== 0">
+        <div id="{{ block.id }}" class="site-info__block">
+            <div class="site-info__content">
                 <h3 class="site-info__subtitle">{{block.title}}</h3>
                 <p class="site-info__text">{{block.description}}</p>
             </div>
-            <div class="site-info__video" [class.site-info__video--left]="i % 2 !== 0">
-                <video src="RouteGuide — Яндекс Браузер 2025-04-29 01-02-50.mp4" controls></video>
-            </div>
-            <div class="site-info__clearfix"></div>
         </div>
         }
 
         <h2 class="site-info__title">Основные возможности</h2>
 
         @for (feature of features; track feature; let i = $index) {
-        <div class="site-info__block">
+        <div id="{{ feature.id }}" class="site-info__block">
             <div class="site-info__content" [class.site-info__content--right]="i % 2 !== 0">
                 <h3 class="site-info__subtitle">{{feature.title}}</h3>
                 <p class="site-info__text">{{feature.description}}</p>
             </div>
-            <div class="site-info__video" [class.site-info__video--left]="i % 2 !== 0">
-                <video src="RouteGuide — Яндекс Браузер 2025-04-29 01-02-50.mp4" controls></video>
+            <div class="site-info__img" [class.site-info__video--left]="i % 2 !== 0">
+                <img src="{{ feature.img }}" controls>
             </div>
-            <div class="site-info__clearfix"></div>
         </div>
         }
     </div>

@@ -24,14 +24,35 @@
 
     &__top {
         background-color: var.$color-yellow;
-        padding: 25px;
+        padding: 10px;
         box-shadow: 5px 5px 10px var.$color-black-transparent-50;
         text-align: center;
-        height: 75px;
+        height: max-content;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         border-radius: var.$border-radius;
+
+        .auth-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 25px;
+
+            &__auth-btn  {
+                height: 40px;
+                width: 200px;
+                border-radius: var.$border-radius;
+                background-color: var.$color-white-transparent-75;
+                font-family: var.$font-family-primary;
+                font-size: 18px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var.$color-black-transparent-25;
+                }
+            }
+        }
     }
 
     &__title {
@@ -154,7 +175,7 @@
     justify-content: center;
 
     &__container {
-        max-width: 1200px;
+        max-width: 1600px;
         margin: 0 auto;
     }
 
@@ -188,8 +209,8 @@
 
     &__block {
         display: flex;
-        gap: 50px;
-        margin-bottom: 40px;
+        gap: 10px;
+        margin-bottom: 50px;
         align-items: flex-start;
 
         &:nth-child(even) {
@@ -202,16 +223,19 @@
         min-width: 0;
     }
 
-    &__video {
-        width: 350px;
-        height: 225px;
-        flex-shrink: 0;
+    &__img {
+        flex: 1 1;
+        height: auto;
+        box-sizing: border-box;
+        flex-shrink: 20px;
+        padding: 50px;
 
-        video {
+        img {
+            margin-top: -50px;
             width: 100%;
-            height: 100%;
-            border-radius: var.$border-radius;
+            height: auto;
             object-fit: cover;
+            border-radius: var.$border-radius;
             box-shadow: 5px 5px 5px var.$color-black-transparent-50;
             border: 5px solid var.$color-white;
         }
@@ -225,34 +249,36 @@
     }
 
     .text-content {
-        max-width: calc(100vw - 100px);
-        transform: scale(0.75);
-        transform-origin: top center;
+        width: calc(100vw - 150px);
+        max-width: none;
     }
 
     .gallery {
-        margin-top: -175px;
+        margin-top: 0;
         width: 100%;
         align-items: center;
 
         &__main-image {
-            width: 400px;
-            height: 250px;
+            width: calc(100vw - 150px);
+            height: auto;
         }
 
         &__thumbnails {
             flex-direction: column;
+            align-items: center;
             gap: 25px;
         }
 
         &__thumbnail {
-            width: 400px !important;
-            height: 250px;
+            width: calc(100vw - 150px) !important;
+            max-width: 500px;
+            height: auto;
         }
     }
 
     .site-info {
-        width: 100%;
+        width: calc(100vw - 150px);
+        max-width: none;
         padding: 30px 15px;
         box-sizing: border-box;
 
@@ -265,14 +291,67 @@
             gap: 20px;
         }
 
-        &__video {
+        &__img {
             width: 100%;
             height: auto;
-            aspect-ratio: 16/9;
         }
 
         &__content {
             width: 100%;
+        }
+    }
+}
+
+@media (max-width: 567px) {
+    .text-content {
+        width: calc(100vw - 50px);
+
+        &__top {
+            .auth-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__subtitle {
+            margin: 0;
+            font-family: var.$font-family-secondary;
+            font-size: 22px;
+            text-align: center;
+        }
+    }
+
+    .gallery {
+        &__main-image {
+            width: calc(100vw - 50px);
+        }
+
+        &__thumbnail {
+            width: calc(100vw - 50px) !important;
+        }
+    }
+
+    .site-info {
+        width: calc(100vw - 50px);
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__intro,
+        &__text,
+        &__final {
+            font-family: var.$font-family-primary;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
         }
     }
 }

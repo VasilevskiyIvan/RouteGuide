@@ -69,45 +69,43 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private calculateAndDisplayStats(routes: LoadRoute[]): void {
     const now = new Date();
     const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    const lastMonthRoutes = routes.filter(route => {
+    const currentMonthRoutes = routes.filter(route => {
       const createdAt = route.createdAt instanceof Date ? route.createdAt : (route.createdAt as any).toDate();
-      return createdAt >= startOfLastMonth && createdAt < startOfCurrentMonth;
+      return createdAt >= startOfCurrentMonth && createdAt <= now;
     });
 
     const allTimeStats = this.aggregateStats(routes);
-    const lastMonthStats = this.aggregateStats(lastMonthRoutes);
+    const currentMonthStats = this.aggregateStats(currentMonthRoutes);
 
     this.stats = [
       {
         label: 'Количество сохраненных маршрутов',
-        lastMonth: lastMonthRoutes.length,
+        lastMonth: currentMonthRoutes.length,
         allTime: routes.length
       },
       {
         label: 'Общая дистанция',
-        lastMonth: this.formatDistance(lastMonthStats.totalDistanceKm),
+        lastMonth: this.formatDistance(currentMonthStats.totalDistanceKm),
         allTime: this.formatDistance(allTimeStats.totalDistanceKm)
       },
       {
         label: 'Общее расстояние (на авто)',
-        lastMonth: this.formatDistance(lastMonthStats.carDistanceKm),
+        lastMonth: this.formatDistance(currentMonthStats.carDistanceKm),
         allTime: this.formatDistance(allTimeStats.carDistanceKm)
       },
       {
         label: 'Общее расстояние (пешком)',
-        lastMonth: this.formatDistance(lastMonthStats.footDistanceKm),
+        lastMonth: this.formatDistance(currentMonthStats.footDistanceKm),
         allTime: this.formatDistance(allTimeStats.footDistanceKm)
       },
       {
         label: 'Общее расстояние (на велосипеде)',
-        lastMonth: this.formatDistance(lastMonthStats.bikeDistanceKm),
+        lastMonth: this.formatDistance(currentMonthStats.bikeDistanceKm),
         allTime: this.formatDistance(allTimeStats.bikeDistanceKm)
       },
       {
         label: 'Суммарное время в пути',
-        lastMonth: timeFormat(lastMonthStats.totalDurationSeconds),
+        lastMonth: timeFormat(currentMonthStats.totalDurationSeconds),
         allTime: timeFormat(allTimeStats.totalDurationSeconds)
       }
     ];

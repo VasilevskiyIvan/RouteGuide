@@ -31,7 +31,7 @@ export class LoginPageComponent {
       next: (user: User | null) => {
         if (user) {
           setTimeout(() => {
-            this.router.navigate(['/saved']);
+            this.router.navigate(['/profile']);
           }, 0);
         } else {
           alert('Неверный email или пароль.');

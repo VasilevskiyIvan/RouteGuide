@@ -1,5 +1,5 @@
 export function timeFormat(time: number | undefined | null): string {
-    if (time === undefined || time === null || isNaN(time) || time <= 0) return `0 sec`;
+    if (time === undefined || time === null || isNaN(time) || time <= 0) return `0 сек`;
 
     let days = Math.floor(time / 86400);
     let hours = Math.floor((time % 86400) / 3600);

@@ -155,4 +155,20 @@ export class SavedPageComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  public getTranslatedMode(mode: string | undefined | null): string {
+    if (!mode) {
+      return ' - ';
+    }
+    switch (mode) {
+      case 'car':
+        return 'Машина';
+      case 'foot':
+        return 'Пешком';
+      case 'bike':
+        return 'Велосипед';
+      default:
+        return mode;
+    }
+  }
 }

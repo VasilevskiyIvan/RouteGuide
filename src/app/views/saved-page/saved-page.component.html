@@ -31,7 +31,7 @@
     </section>
 
     @if (currentUser === null) {
-         <div>Пожалуйста, войдите в аккаунт, чтобы увидеть сохраненные маршруты.</div>
+        <div>Пожалуйста, войдите в аккаунт, чтобы увидеть сохраненные маршруты.</div>
     } @else if (routes === null) {
         <div>Загрузка маршрутов...</div>
     } @else if (routes.length === 0) {
@@ -47,12 +47,12 @@
                         До: {{ route.endAddress}}
                     </div>
                     <div>
-                         Транспорт: {{ route.mode}}
+                        Транспорт: {{ getTranslatedMode(route.mode) }}
                     </div>
                      @if (route.createdAt) {
-                          <div>
-                              Сохранен: {{ route.createdAt | date:'short' }}
-                          </div>
+                         <div>
+                             Сохранен: {{ route.createdAt | date:'short' }}
+                         </div>
                      }
 
                     <button (click)="deleteRoute($event, route)" class="routes__delete-button">удалить</button>

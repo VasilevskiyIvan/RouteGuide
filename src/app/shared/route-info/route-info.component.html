@@ -15,8 +15,10 @@
     @if (routeData) {
     <div class="route-form__time-info">
         <div class="route-form__time-item">
-            <label class="route-form__time-label">Расчётное время в пути</label>
-            <p class="route-form__time-value">{{ routeData.time }}</p>
+            <label class="route-form__label">Рассчитанное время в пути:</label>
+            <p class="route-form__value">{{ routeData.time }}</p>
+            <label class="route-form__label">Рассчитанное расстояние:</label>
+            <p class="route-form__value">{{ routeData.distance }}</p>
         </div>
     </div>
     }

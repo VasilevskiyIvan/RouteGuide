@@ -345,13 +345,7 @@
         &__intro,
         &__text,
         &__final {
-            font-family: var.$font-family-primary;
             font-size: 16px;
-            line-height: 1.6;
-            margin: 0 0 20px 0;
-            text-align: justify;
-            text-justify: inter-word;
-            hyphens: auto;
         }
 
         &__img {

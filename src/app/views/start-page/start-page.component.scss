@@ -39,7 +39,7 @@
             display: flex;
             gap: 25px;
 
-            &__auth-btn  {
+            &__auth-btn {
                 height: 40px;
                 width: 200px;
                 border-radius: var.$border-radius;
@@ -352,6 +352,11 @@
             text-align: justify;
             text-justify: inter-word;
             hyphens: auto;
+        }
+
+        &__img {
+            margin-top: 25px;
+            padding: 0;
         }
     }
 }

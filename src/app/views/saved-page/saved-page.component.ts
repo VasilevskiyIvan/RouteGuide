@@ -42,10 +42,6 @@ export class SavedPageComponent implements OnInit, OnDestroy {
         this.allUserRoutes = [];
       }
     });
-
-    this.authService.currentUser.pipe(takeUntil(this.destroy$)).subscribe(user => {
-      this.currentUser = user;
-    });
   }
 
   ngOnDestroy(): void {

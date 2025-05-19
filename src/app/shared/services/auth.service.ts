@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, User as FirebaseAuthUser } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, from, of, switchMap, map, catchError, tap, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, from, of, switchMap, map, catchError, tap, shareReplay, throwError } from 'rxjs';
 import { User } from '../interfaces/user-interface';
 
 @Injectable({
@@ -54,7 +54,7 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Ошибка входа:', error.message);
-        return of(null);
+        return throwError(() => error);
       })
     );
   }
@@ -75,7 +75,7 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Ошибка регистрации:', error.message);
-        return of(null);
+        return throwError(() => error);
       })
     );
   }

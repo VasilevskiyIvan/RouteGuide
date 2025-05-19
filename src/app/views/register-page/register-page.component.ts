@@ -22,11 +22,11 @@ export class RegisterPageComponent {
 
   onSubmit(): void {
     if (this.password !== this.confirmPassword) {
-      alert('Пароли не совпадают.');
+      alert('Пароли не совпадают');
       return;
     }
     if (!this.email || !this.password || !this.username) {
-      alert('Заполните все поля.');
+      alert('Заполните все поля');
       return;
     }
 
@@ -34,13 +34,27 @@ export class RegisterPageComponent {
       next: (user: User | null) => {
         if (user) {
           this.router.navigate(['/profile']);
-        } else {
-          alert('Ошибка регистрации.');
         }
       },
-      error: (err) => {
-        console.error('Ошибка регистрации:', err);
-        alert('Произошла ошибка при регистрации.');
+      error: (error: any) => {
+        console.error('Ошибка регистрации:', error);
+        let message = 'Неизвестная ошибка регистрации';
+
+        switch (error.code) {
+          case 'auth/invalid-email':
+            message = 'Некорректный формат email адреса';
+            break;
+          case 'auth/email-already-in-use':
+            message = 'Email уже используется';
+            break;
+          case 'auth/weak-password':
+            message = 'Пароль слишком короткий или простой';
+            break;
+          default:
+            break;
+        }
+
+        alert(message);
       }
     });
   }

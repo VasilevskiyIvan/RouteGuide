@@ -23,16 +23,13 @@ export class RouteInfoComponent {
 
   onStartAddressChange(value: string) {
     this.startAddressChange.emit(value);
-    console.log('Начальный адрес изменен:', value);
   }
 
   onEndAddressChange(value: string) {
     this.endAddressChange.emit(value);
-    console.log('Конечный адрес изменен:', value);
   }
 
   onModeChange(value: string) {
     this.modeChange.emit(value);
-    console.log('Режим изменен:', value);
   }
 }

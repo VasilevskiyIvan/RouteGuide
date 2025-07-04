@@ -1,59 +1,60 @@
-# RouteGuide
+# 🗺️ Frontend-приложение для планирования маршрутов (RouteGuide)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+**Интерактивное одностраничное веб-приложение**, разработанное на Angular, позволяющее пользователям строить, сохранять и управлять маршрутами с использованием карт и геоданных.  
 
-## Development server
+---
 
-To start a local development server, run:
+## 📌 Описание проекта
 
-```bash
-ng serve
-```
+Приложение создавалось в рамках **прохождения стажировки в компании ООО "Секьюридж" (ООО НПО "Панцирь")**.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Приложение предназначено для поиска оптимального маршрута между двумя точками с учётом типа транспорта, отображения маршрута на карте, а также управления сохранённой историей поездок.  
 
-## Code scaffolding
+Поддерживается регистрация, авторизация и сохранение пользовательских данных в облаке с помощью Firebase.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🛠️ Стек технологий
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- **Angular 19** - фреймворк для разработки SPA  
+- **TypeScript** - основной язык
+- **RxJS** - реактивное управление асинхронными потоками
+- **Leaflet** - библиотека для интерактивной работы с картами
+- **OpenStreetMap**:
+  - **Nominatim** - геокодирование (адрес → координаты)
+  - **OSRM** - построение маршрутов
+- **Firebase**:
+  - **Authentication** - регистрация, вход, выход
+  - **Cloud Firestore** - хранение данных о маршрутах
+- **HTML5 / SCSS** - верстка и стилизация
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## ✨ Основные возможности
 
-To build the project run:
+- 🧭 **Построение маршрутов**  
+  Выбор начальной и конечной точек + выбор транспорта (авто, пешком, велосипед)
 
-```bash
-ng build
-```
+- 🗺️ **Отображение на карте**  
+  Визуализация маршрутов, метки начала и конца маршрута
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- 📊 **Детализация маршрута**  
+  Информация о расстоянии и времени в пути
 
-## Running unit tests
+- 🔐 **Аутентификация**  
+  Регистрация, вход и выход, управление сессиями пользователей
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- 💾 **Сохранение маршрутов**  
+  Авторизованные пользователи могут сохранять маршруты в Firebase
 
-```bash
-ng test
-```
+- 🗂️ **Управление маршрутами**  
+  Фильтрация по дате, адресу, транспорту; удаление маршрутов
 
-## Running end-to-end tests
+- 📱 **Динамическое меню**  
+  Меню адаптируется под статус авторизации
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## ✅ Заключение
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Архитектура приложения следует современным стандартам разработки на Angular, с акцентом на читаемость, повторное использование компонентов и безопасность пользовательских данных. При разметке использовалась методология БЭМ
